@@ -1,60 +1,64 @@
-# 取词朗读 · SelectSpeak
+# SelectSpeak
 
-Windows 10/11 x64 的跨应用英文点读原型。选中英文、松开鼠标、点击小喇叭，即可使用本地 Kokoro 神经语音朗读。
+**A fluffy desktop companion that reads selected English aloud.**
 
-<img src="src/ui/assets/blue-companion.png" width="220" alt="取词朗读的毛绒桌面伙伴小蓝">
+Select English text, click the floating speaker, and listen with local Kokoro speech. Keep a little blue companion on your Windows desktop while you read.
 
-## 使用
+[Download Windows preview](https://github.com/yuehua-meng/select-speak/releases/tag/v0.3.0) · [中文说明](README.zh-CN.md) · [Report compatibility](https://github.com/yuehua-meng/select-speak/issues/new?template=compatibility.yml)
 
-GitHub 仓库包含源码、测试及小蓝图片，不包含依赖、模型权重和打包产物。首次从源码运行，请先完成下方“开发”中的安装、模型下载步骤，再运行 `npm start`；需要双击启动时，先运行 `npm run pack`。
+![SelectSpeak: a fluffy reading companion for Windows](docs/media/social-preview.png)
 
-双击根目录的 **启动取词朗读.cmd**，或者运行 `release/win-unpacked/SelectSpeak.exe`。
+**Windows 10/11 x64 · Free source code · Local CPU speech · No API key · MIT source license**
 
-等待工作台显示 **Kokoro 已就绪**。模型会在启动时加载并预热，之后可以离线使用，无需账号、API Key 或额外安装 Python。
+## See the companion
 
-在浏览器、Word、PDF 或 Markdown 编辑器中用鼠标选中英文，点击浮动喇叭朗读；再次点击停止。关闭工作台后继续在系统托盘运行；托盘菜单可暂停监听、停止播放或退出。
+![Companion animations captured from the app renderer](docs/media/companion-demo.gif)
 
-声音与偏好中可以选择：
+Single-click to pat; double-click for a happy bounce. Drag to move, or right-click for speech controls, voice selection, size and visibility. The companion reacts to speech generation and playback.
 
-- Heart / Bella：美音女声，默认 Heart。
-- Michael：美音男声。
-- Emma：英音女声。
-- George：英音男声。
-- 速度范围：0.60×～1.40×；速度、音色和应用兼容名单均可保存。
+This animation preview captures the app renderer with scripted interactions. It does not demonstrate native text selection in another application. The character uses the selected transparent image with whole-image animations.
 
-试听按钮朗读示例短句。运行 `npm run test:kokoro` 后，`samples/` 中会生成单词和英美音 WAV 样本，可直接播放比较。`examples/` 中有划词测试用的 HTML 和 Markdown。
+[Watch the preview with a real Kokoro audio sample](https://github.com/yuehua-meng/select-speak/releases/download/v0.3.0/SelectSpeak-companion-preview.mp4) · [Listen to Heart](docs/media/kokoro-heart-sample.wav)
 
-## 桌面小蓝
+## Try it on Windows
 
-启动后，毛茸茸的小蓝显示在桌面右下角，使用选定的透明 PNG 原图。
+1. Download **SelectSpeak-0.3.0-windows-x64.zip** from the [preview release](https://github.com/yuehua-meng/select-speak/releases/tag/v0.3.0).
+2. Extract the entire folder and run **SelectSpeak.exe**. Keep the `resources` folder beside it.
+3. Wait for Kokoro to finish loading. Select an English word in another application, release the mouse, and click the floating speaker.
 
-- 单击：摸摸头的晃动反馈；双击：开心跳跃。单击会等待 Windows 双击判定时间，避免双击先触发单击。
-- 按住拖动：移动位置；透明空白区域允许鼠标点击下面的软件。
-- 右键：朗读最近选区、停止、切换音色、暂停划词、调整大小、固定位置、休息、打开设置或隐藏。
-- 隐藏后，从系统托盘右键菜单勾选“显示小蓝”即可恢复。
-- 正在生成和播放语音时，小蓝会显示对应提示和动作。单击、双击只触发互动，不会自动朗读或打断当前语音。
-- 大小、位置、固定和休息偏好保存在 `data/companion.json`；本版通过原图的整体移动与缩放实现动画。
+The ZIP includes the runtime and speech model; Node.js, Python, a GPU and an API account are not required. It is a portable, unsigned preview build. Compare your download with the release's `SHA256SUMS.txt` to verify it.
 
-## 本地模型与播放
+**The application interface is currently primarily Simplified Chinese.** This README and the download's quick-start guide explain the controls in English. English UI localization is open for contributions.
 
-- 模型：Kokoro-82M v1.0 ONNX，FP32 完整精度，CPU 推理。
-- 模型文件约 326 MB，随打包程序分发。SHA-256：`8fbea51ea711f2af382e88c833d9e288c6dc82ce5e98421ea61c058ce21a34cb`。
-- 模型先加载和预热，在独立进程中生成音频。重复片段使用最多 32 MiB 的内存缓存，不把选中文字和生成音频写入持久缓存。
-- 长文本按句子和长度分段，最多提前生成两段。超出音素上下文时再次分段，避免静默截断。
-- 停止播放会立即清空已排队音频；正在进行的模型计算可能仍需完成，但结果会被丢弃。
-- 运行时关闭远程模型加载，并阻止推理进程的 fetch 网络请求。模型下载只在开发准备阶段进行。
+## What it does
 
-## 已知边界
+- Reads selected English words and sentences through a small, non-activating speaker window.
+- Runs Kokoro-82M ONNX at FP32 precision on the CPU, in a separate process.
+- Offers Heart, Bella and Michael for American English; Emma and George for British English.
+- Supports playback speed, stop, sentence chunking and bounded in-memory audio caching.
+- Keeps the companion and speech controls available through a tray menu.
+- Uses Windows accessibility interfaces for selection, with optional clipboard fallback for an application allowlist.
 
-Kokoro 的英语音色适合英文。中英混合选区中的中文不保证准确；单词发音、专有名词及同形异音词仍需实际听辨，选中孤立单词时没有完整语境。音色自然度不等于每个单词一定正确。
+Runtime speech uses local model files, disables remote model loading and blocks the synthesis worker's fetch. The app does not upload selected text. The development model-download command does use the network.
 
-取词依赖目标软件暴露的辅助功能接口；必要时只在允许名单内模拟复制。复制兼容模式会尝试恢复剪贴板，但可能影响剪贴板历史。终端和密码管理器默认排除；图片型 PDF、受保护内容或管理员窗口可能无法取词。
+## Compatibility and current limits
 
-本版完成了原生监听启动、Kokoro 离线合成、缓存、分段、取消后重新合成和播放器集成测试；小蓝的图片加载、透明背景、单击/双击动画已通过 Electron 冒烟测试。尚未逐项完成所有 Word/PDF/Markdown 软件与版本的人工兼容验收。
+This is an early Windows preview. The selection mechanism targets readers, editors and browsers that expose selectable text; compatibility depends on the application and document. **Word, PDF readers and Markdown editors have not yet been exhaustively verified across versions.** See the [compatibility matrix and test procedure](docs/COMPATIBILITY.md).
 
-## 开发
+- Scanned PDFs, protected documents and elevated applications may not expose text.
+- Clipboard fallback may leave an entry in clipboard history even when clipboard contents are restored.
+- English voices are intended for English. Pronunciation of names, isolated ambiguous words and mixed-language passages needs listening checks.
+- macOS and Linux are not supported by this preview.
 
-需要 Node.js 24 和 npm。使用锁文件安装依赖：
+## Workbench
+
+![Actual SelectSpeak workbench captured during its Electron smoke test](docs/media/workbench.png)
+
+The workbench lets you choose voices, adjust speed, manage application lists and stop speech. Closing it keeps the application in the tray. Use **退出程序** or the tray's **退出** to quit.
+
+## Build from source
+
+Requirements: **Windows x64, Node.js 24 and npm**.
 
 ```powershell
 git clone https://github.com/yuehua-meng/select-speak.git
@@ -62,21 +66,25 @@ cd select-speak
 npm ci
 npm run model:download
 npm test
-npm run test:kokoro
 npm start
-npm run pack
 ```
 
-`model:download` 先尝试 Hugging Face，连接不可达时使用 hf-mirror.com，所有模型和配置按固定版本及校验值验证。也可通过 `HF_ENDPOINT` 指定下载源。程序运行时不会自动下载。
+The model-download command downloads pinned files and checks their hashes. It tries Hugging Face and then hf-mirror.com; set `HF_ENDPOINT` to choose the origin. Model files, dependencies, personal settings and generated builds are excluded from Git.
 
-如果 Electron 下载失败且本机存在对应版本缓存，可使用 `node scripts/restore-electron-cache.cjs <缓存目录>`；脚本会核对 Electron 包自带的 SHA-256。
+```powershell
+npm run test:kokoro  # real offline synthesis tests; produces WAV samples
+npm run smoke        # starts Electron, tests playback and companion; makes sound
+npm run pack         # produces release/win-unpacked/
+```
 
-`npm run smoke` 启动真实 Electron 窗口、载入模型并播放一句英文，报告保存在 `work/smoke/`。这一步会发出声音。
+The complete ONNX model is approximately 326 MB. The distribution also contains Electron and native inference dependencies. See [release notes](docs/RELEASE_NOTES.md) for packaging and verification.
 
-## 打包与数据
+## Help shape the next release
 
-可运行文件在 `release/win-unpacked/`，依赖、音色和模型都在其中。分享时复制整个目录，不能单独复制 exe。根目录保留源码、锁文件与下载脚本。
+Useful contributions include [reporting an application compatibility result](https://github.com/yuehua-meng/select-speak/issues/new?template=compatibility.yml), testing the portable build on another Windows computer and improving English localization. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-设置和不含选中文字的诊断日志保存在 `data/`。单独移动 win-unpacked 目录后，数据保存在该目录的 `data/` 下。
+If you find SelectSpeak useful, a GitHub star helps other readers discover it. Feedback about a real use case is welcome too.
 
-应用源码为 MIT；Kokoro 模型与 kokoro-js 为 Apache-2.0。第三方依赖及运行时各自保留其许可，详情见 THIRD_PARTY_NOTICES.md 和依赖目录。
+## License and credits
+
+Application source: [MIT](LICENSE). Kokoro-82M and kokoro-js: Apache-2.0. Electron and other bundled components retain their own licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The blue companion image was generated for this project; its animation is implemented in CSS and TypeScript.

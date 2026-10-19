@@ -1,0 +1,9 @@
+name: Feature request / 功能建议
+description: Describe the reading problem you want to solve.
+body:
+  - type: textarea
+    id: usecase
+    attributes:
+      label: Use case and proposed improvement
+    validations:
+      required: true

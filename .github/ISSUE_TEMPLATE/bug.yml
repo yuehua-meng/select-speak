@@ -1,0 +1,22 @@
+name: Bug report / 问题反馈
+description: Report a reproducible SelectSpeak problem.
+title: "[Bug] "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: SelectSpeak and Windows versions
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps, expected result, actual result
+      description: Use public sample text. Review screenshots and logs before sharing them.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Relevant logs or screenshots
+      description: Remove credentials, personal paths and private content.

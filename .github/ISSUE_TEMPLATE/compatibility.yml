@@ -1,0 +1,35 @@
+name: Application compatibility / 应用兼容
+description: Report a real selection or playback result in a Windows application.
+title: "[Compatibility] "
+body:
+  - type: input
+    id: application
+    attributes:
+      label: Application and version / 软件与版本
+      placeholder: e.g. Microsoft Edge 000, Word 000, PDF reader 000
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version and display scaling
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - Works in this scenario
+        - Speaker does not appear
+        - Speaker appears but speech fails
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction and document type
+      description: Include public sample text, selectable vs scanned content, clipboard fallback on/off, and whether the app is elevated. Do not include private documents or clipboard contents.
+    validations:
+      required: true
