@@ -1,0 +1,55 @@
+{
+  "name": "select-speak",
+  "version": "0.3.0",
+  "description": "Windows 跨应用英文取词朗读原型",
+  "private": true,
+  "main": "dist/main.js",
+  "author": "SelectSpeak Contributors",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc && node scripts/copy-assets.cjs",
+    "start": "npm run build && electron .",
+    "test": "npm run build && node --test tests/*.test.cjs",
+    "smoke": "npm run build && electron . --smoke-test",
+    "model:download": "node scripts/download-kokoro.cjs",
+    "test:kokoro": "npm run build && node scripts/test-kokoro.cjs",
+    "pack": "npm run build && electron-builder --win dir --x64"
+  },
+  "dependencies": {
+    "kokoro-js": "1.2.1",
+    "selection-hook": "2.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "electron": "44.4.3",
+    "electron-builder": "26.15.3",
+    "typescript": "5.9.3"
+  },
+  "build": {
+    "appId": "org.selectspeak.desktop",
+    "productName": "SelectSpeak",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "LICENSE",
+      "README.md",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/**/*",
+      "dist/native/**/*",
+      "dist/speech-core.js"
+    ],
+    "npmRebuild": false,
+    "extraResources": [{ "from": "models/kokoro", "to": "models/kokoro", "filter": ["**/*", "!**/*.partial"] }],
+    "win": {
+      "target": "dir",
+      "signAndEditExecutable": false
+    }
+  }
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+release/
+data/
+work/
+*.log
+models/
+samples/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12

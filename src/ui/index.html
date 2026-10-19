@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'">
+  <title>取词朗读 · SelectSpeak</title><link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">s<span>♪</span></div><div><strong>取词朗读</strong><small>SELECTSPEAK</small></div></div>
+    <div class="sidebar-label">你的英文点读工具</div>
+    <a class="nav active" href="#overview"><span>◉</span> 工作台</a>
+    <a class="nav" href="#preferences"><span>≋</span> 声音与偏好</a>
+    <a class="nav" href="#compatibility"><span>⌘</span> 应用兼容</a>
+    <div class="sidebar-bottom"><div class="local-dot">本地运行</div><p>文字留在电脑上<br>Kokoro 神经语音 · 离线</p><small id="version">预览版 0.2.0</small></div>
+  </aside>
+  <main>
+    <header><div><span class="eyebrow">READ A LITTLE. HEAR A LITTLE.</span><h1>让英文阅读，顺一点。</h1></div><button id="enable-button" class="enable-button" type="button"><i></i><span>监听中</span></button></header>
+    <section id="overview" class="overview-grid">
+      <div class="hero card">
+        <span class="pill">SELECT → LISTEN</span><h2>划一下，<br>听见英语<span>。</span></h2><p>在其他软件里选中英文，<br>点一下小喇叭，就能听到发音。</p>
+        <div class="sample-word"><span>curiosity</span><button id="sample-button" type="button" aria-label="试听 Kokoro 声音"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg></button></div>
+        <div class="steps"><span><b>01</b> 选中英文</span><span><b>02</b> 点击喇叭</span><span><b>03</b> 继续阅读</span></div>
+      </div>
+      <div class="right-stack">
+        <section class="card status-card"><div class="section-heading"><h3>运行状态</h3><span class="tiny-label">LIVE</span></div><div class="status-line"><i id="hook-dot" class="status-dot"></i><div><strong id="hook-status">正在启动监听…</strong><p id="hook-message">正在连接系统选区接口</p></div></div><div class="status-line"><i id="speech-dot" class="status-dot"></i><div><strong id="speech-status">正在加载 Kokoro…</strong><p id="speech-message">模型加载后即可离线使用</p></div></div><button id="restart-button" class="text-button" type="button">重新连接服务 ↗</button></section>
+        <section class="card selection-card"><div class="section-heading"><h3>最近一次取词</h3><span id="selection-time" class="tiny-label">等待选中</span></div><p id="selection-text" class="selection-text empty">打开浏览器、Word 或 PDF，<br>选中一个英文单词试试。</p><div class="selection-footer"><span id="selection-source">文字只在本次运行中保留</span><button id="replay-button" class="text-button" type="button" disabled>重播 ↗</button></div></section>
+      </div>
+    </section>
+    <form id="settings-form">
+      <section id="preferences" class="card preferences"><div class="section-heading"><div><h3>声音与偏好</h3><p>Kokoro 本地神经语音，支持美音与英音。</p></div><button id="voice-test-button" class="outline-button" type="button">试听声音</button></div>
+        <div class="form-grid"><label class="field">Kokoro 音色<select id="voice"><option value="">正在加载音色…</option></select></label><label class="field">朗读速度 <span id="rate-label" class="field-value">正常</span><input id="rate" type="range" min="-5" max="5" step="1" value="0"><span class="range-labels"><span>慢一点</span><span>快一点</span></span></label></div>
+        <div class="preference-row"><div><strong>只为包含英文字母的选区显示按钮</strong><p>当前音色适合英文；中英混合内容的中文发音可能不准确。</p></div><label class="switch"><input id="english-only" type="checkbox" checked><span></span></label></div>
+        <div class="preference-row"><div><strong>按钮停留时间</strong><p>移到按钮上或朗读时会延长显示。</p></div><select id="popup-seconds" class="small-select"><option value="5">5 秒</option><option value="8">8 秒</option><option value="15">15 秒</option><option value="30">30 秒</option></select></div>
+      </section>
+      <section id="compatibility" class="card compatibility"><div class="section-heading"><div><h3>应用兼容</h3><p>优先直接读取选区，需要时再尝试复制。</p></div><span class="pill neutral">WINDOWS</span></div>
+        <div class="preference-row"><div><strong>启用复制兼容模式</strong><p>仅对下方应用生效。会尝试恢复剪贴板，但可能留下剪贴板历史。</p></div><label class="switch"><input id="clipboard-fallback" type="checkbox" checked><span></span></label></div>
+        <details><summary>管理应用名单 <span>进程名称，如 acrobat.exe</span></summary><div class="form-grid"><label class="field">允许复制取词的应用<textarea id="clipboard-apps" rows="5" spellcheck="false"></textarea></label><label class="field">不触发取词的应用<textarea id="excluded-apps" rows="5" spellcheck="false"></textarea></label></div><p class="hint">每行一个 .exe 名称。终端和密码管理器默认不触发；本应用始终忽略自己的选区。</p></details>
+        <div class="compat-note">支持情况取决于阅读软件与文档。扫描图片、受保护内容及管理员窗口可能无法取词；单次最多 12,000 个字符。</div>
+      </section>
+      <div class="save-bar"><p id="save-hint">关闭窗口后继续在托盘运行。退出请用托盘菜单。</p><button class="primary-button" type="submit" id="save-button">保存设置</button></div>
+    </form>
+    <footer><span>SELECTSPEAK <b>·</b> 开源英文点读原型</span><button id="stop-button" class="text-button" type="button">停止朗读</button><button id="quit-button" class="text-button" type="button">退出程序</button></footer>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="../renderer.js"></script>
+</body></html>
