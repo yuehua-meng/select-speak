@@ -25,3 +25,13 @@ Windows English selection-to-speech app with local Kokoro CPU synthesis and an i
 ```
 
 The existing table uses a linked project name, a concise stack, and a short factual note. Do not add a Quick Picks endorsement, rewrite other entries, or claim cross-platform support. The corresponding `catalog.json` change must follow the actual upstream schema after it has been read.
+
+## Final verification by the publishing agent
+
+The official CONTRIBUTING.md and catalog.json were subsequently fetched through GitHub's API. They require a working project URL, readable setup instructions, visible companion/overlay behavior, a short distinguishing note, and updating both README.md and catalog.json. SelectSpeak's submission meets those documented conditions.
+
+The two-file patch passed the list's own validator: `validated 22 catalog entries`.
+
+Submitted PR: https://github.com/StaryMoon/awesome-desktop-pets/pull/3
+
+Status at publication: OPEN, awaiting maintainer review; no claim of inclusion or endorsement.
